@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
 
-filename = "C:/Users/offic/MyCode/HW08/when_birthday/when_birthday/employees.txt"
+filename = "employees.txt"
 
 
 def get_employees_list(filename):
