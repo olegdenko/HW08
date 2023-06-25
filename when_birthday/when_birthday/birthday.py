@@ -1,11 +1,24 @@
 from datetime import datetime, timedelta
-from collections import deque
+from collections import defaultdict
 
-employees = [
-    {"name": "Piter", "birthdate": datetime(1998, 6, 28)},
-    {"name": "Angel", "birthdate": "24.06.2000"},
-    {"name": "Lilu", "birthdate": datetime(1985, 6, 25)},
-]
+filename = "C:/Users/offic/MyCode/HW08/when_birthday/when_birthday/employees.txt"
+
+
+def get_employees_list(filename):
+    employees = []
+    with open(filename, "r") as file:
+        while True:
+            line = file.readline()
+            line = line.strip()
+            if line:
+                name, date_str = line.split(":")
+                date_str = date_str.replace(".", ",")  # Заміна крапок на коми
+                birthdate = datetime.strptime(date_str.strip(), "%Y, %m, %d")
+                employee = {"name": name.strip(), "birthdate": birthdate}
+                employees.append(employee)
+            else:
+                break
+    return employees
 
 
 def get_period() -> tuple[datetime.date, datetime.date]:
@@ -14,30 +27,29 @@ def get_period() -> tuple[datetime.date, datetime.date]:
     return start_period.date(), (start_period + timedelta(6)).date()
 
 
-def check_elp(list_of_emp: list) -> None:
+def check_epl(list_of_emp: list) -> None:
+    result = defaultdict(list)
     current_year = datetime.now().year
-    for emploee in list_of_emp:
-        bd = emploee["birthdate"]
+    for employee in list_of_emp:
+        bd = employee["birthdate"]
         if isinstance(bd, datetime):
             bd = bd.date()
         else:
             bd = datetime.strptime(bd, "%d.%m.%Y").date()
         bd = bd.replace(year=current_year)
-        (
-            start,
-            end,
-        ) = get_period()
+
+        start, end = get_period()
 
         if start <= bd <= end:
-            if bd.weekday in (5, 6):
-                result[bd].append(emploee['name'])
+            if bd.weekday() in (5, 6):
+                result[bd].append(employee["name"])
             else:
-                result[bd].append(emploee['name'])
+                result[bd].append(employee["name"])
     return result
-        # print(bd)
 
 
 if __name__ == "__main__":
-    for item, value in check_elp(employees).items():
-        print(key.strftime("%A") for v in value])
-    # check_elp(employees)
+    employees = get_employees_list(filename)
+    for key, value in check_epl(employees).items():
+        print(key.strftime("%A"), value)
+    # print(get_period())
