@@ -5,5 +5,7 @@ setup(
     description="Script for known when birthday of employee",
     version="1.0",
     packages=find_packages(),
-    entry_points={"console_scripts": ["when_birthday = when_birthday.birthday:main"]},
+    entry_points={
+        "console_scripts": ["when_birthday = when_birthday.birthday:get_employees_list"]
+    },
 )
